@@ -13,7 +13,19 @@ type SongHandler struct {
     Service *services.SongService
 }
 
-// добавить документацию swagger
+// @Summary      Get Songs
+// @Description  Возвращает список песен с возможностью фильтрации и пагинации
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        page   query      int     false  "Номер страницы" default(1)
+// @Param        limit  query      int     false  "Лимит на странице" default(10)
+// @Param        group  query      string  false  "Фильтр по группе"
+// @Param        song   query      string  false  "Фильтр по названию песни"
+// @Success      200    {array}    models.Song
+// @Failure      400    {string}   string  "Bad Request"
+// @Failure      500    {string}   string  "Internal Server Error"
+// @Router       /songs [get]
 func (h *SongHandler) GetSongs(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
@@ -42,7 +54,16 @@ func (h *SongHandler) GetSongs(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(songs)
 }
 
-// добавить swagger документацию
+// @Summary      Add Song
+// @Description  Добавляет новую песню
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        song  body      models.Song  true  "Данные новой песни"
+// @Success      200   {object}  models.Song
+// @Failure      400   {string}  string       "Bad Request"
+// @Failure      500   {string}  string       "Internal Server Error"
+// @Router       /songs [post]
 func (h *SongHandler) AddSong(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
